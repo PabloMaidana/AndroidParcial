@@ -9,21 +9,25 @@ import com.example.parcialandroid.model.Producto;
 
 public class DetalleProductoViewModel extends ViewModel {
 
-    private MutableLiveData<Producto> editable = new MutableLiveData<>();
-    private final MutableLiveData<String> mensaje = new MutableLiveData<>();
+    private MutableLiveData<Producto> editable;
+    private MutableLiveData<String> mensaje;
     private String codigoOriginal;
 
     public LiveData<Producto> getEditable() {
-
+        if (editable == null) editable = new MutableLiveData<>();
         return editable;
     }
-    public LiveData<String> getMensaje() { return mensaje; }
+    public LiveData<String> getMensaje() {
+        if (mensaje == null) mensaje = new MutableLiveData<>();
+        return mensaje;
+    }
+
 
     /** Inicializa con el producto recibido desde el Bundle */
     public void initProducto(Producto recibido) {
         if (recibido != null) {
             codigoOriginal = recibido.getCodigo();
-            editable.setValue(
+            ((MutableLiveData<Producto>) getEditable()).setValue(
                     new Producto(recibido.getCodigo(),
                             recibido.getDescripcion(),
                             recibido.getPrecio())
@@ -34,23 +38,23 @@ public class DetalleProductoViewModel extends ViewModel {
     /** Guarda los cambios en la lista estática de MainActivity */
     public void guardarCambios(String nuevoCod, String descripcion, String precioTxt) {
         if (isEmpty(nuevoCod) || isEmpty(descripcion) || isEmpty(precioTxt)) {
-            mensaje.setValue("Campos obligatorios");
+            ((MutableLiveData<String>) getMensaje()).setValue("Campos obligatorios");
             return;
         }
         double precio;
         try { precio = Double.parseDouble(precioTxt.trim()); }
-        catch (NumberFormatException e) { mensaje.setValue("Precio inválido"); return; }
+        catch (NumberFormatException e) {((MutableLiveData<String>) getMensaje()).setValue("Precio inválido"); return; }
 
         Producto original = null;
         for (Producto p : MainActivity.productos) {
             if (p.getCodigo().equalsIgnoreCase(codigoOriginal)) { original = p; break; }
         }
-        if (original == null) { mensaje.setValue("Producto no encontrado"); return; }
+        if (original == null) { ((MutableLiveData<String>) getMensaje()).setValue("Producto no encontrado"); return; }
 
         if (!codigoOriginal.equalsIgnoreCase(nuevoCod)) {
             for (Producto p : MainActivity.productos) {
                 if (p.getCodigo().equalsIgnoreCase(nuevoCod.trim())) {
-                    mensaje.setValue("Código ya existe");
+                    ((MutableLiveData<String>) getMensaje()).setValue("Código ya existe");
                     return;
                 }
             }
@@ -60,14 +64,14 @@ public class DetalleProductoViewModel extends ViewModel {
         original.setDescripcion(descripcion.trim());
         original.setPrecio(precio);
 
-        editable.setValue(
+        ((MutableLiveData<Producto>) getEditable()).setValue(
                 new Producto(original.getCodigo(),
                         original.getDescripcion(),
                         original.getPrecio())
         );
         codigoOriginal = original.getCodigo();
 
-        mensaje.setValue("Producto actualizado");
+        ((MutableLiveData<String>) getMensaje()).setValue("Producto actualizado");
     }
 
     private boolean isEmpty(String s){ return s==null || s.trim().isEmpty(); }

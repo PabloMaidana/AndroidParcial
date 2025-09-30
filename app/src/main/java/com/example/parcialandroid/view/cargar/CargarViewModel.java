@@ -9,9 +9,10 @@ import com.example.parcialandroid.model.Producto;
 
 public class CargarViewModel extends ViewModel {
 
-    private MutableLiveData<String> mensaje = new MutableLiveData<>();
+    private MutableLiveData<String> mensaje;
 
     public LiveData<String> getMensaje() {
+        if (mensaje == null) mensaje = new MutableLiveData<>();
         return mensaje;
     }
 
@@ -31,7 +32,7 @@ public class CargarViewModel extends ViewModel {
             }
         }
         MainActivity.productos.add(new Producto(codigo.trim(), descripcion.trim(), precio));
-        mensaje.setValue("Producto agregado");
+        ((MutableLiveData<String>) getMensaje()).setValue("Producto agregado");
     }
 
     private boolean isEmpty(String s){ return s==null || s.trim().isEmpty(); }

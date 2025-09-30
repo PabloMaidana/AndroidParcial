@@ -9,15 +9,21 @@ import com.example.parcialandroid.model.Producto;
 
 public class ModificarViewModel extends ViewModel {
 
-    private final MutableLiveData<Producto> productoEncontrado = new MutableLiveData<>();
-    private final MutableLiveData<String> mensaje = new MutableLiveData<>();
+    private MutableLiveData<Producto> productoEncontrado;
+    private MutableLiveData<String> mensaje;
 
-    public LiveData<Producto> getProductoEncontrado() { return productoEncontrado; }
-    public LiveData<String> getMensaje() { return mensaje; }
+    public LiveData<Producto> getProductoEncontrado() {
+        if (productoEncontrado == null) productoEncontrado = new MutableLiveData<>();
+        return productoEncontrado;
+    }
+    public LiveData<String> getMensaje() {
+        if (mensaje == null) mensaje = new MutableLiveData<>();
+        return mensaje;
+    }
 
     public void buscar(String codigo) {
         if (codigo == null || codigo.trim().isEmpty()) {
-            mensaje.setValue("Ingrese un código");
+            ((MutableLiveData<String>) getMensaje()).setValue("Ingrese un código");
             return;
         }
         Producto found = null;
@@ -25,9 +31,9 @@ public class ModificarViewModel extends ViewModel {
             if (p.getCodigo().equalsIgnoreCase(codigo.trim())) { found = p; break; }
         }
         if (found != null) {
-            productoEncontrado.setValue(found);
+            ((MutableLiveData<Producto>) getProductoEncontrado()).setValue(found);
         } else {
-            mensaje.setValue("No encontrado");
+            ((MutableLiveData<String>) getMensaje()).setValue("No encontrado");
         }
     }
 }
