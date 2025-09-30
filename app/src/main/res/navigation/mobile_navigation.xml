@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listarFragment">
+
+    <fragment
+        android:id="@+id/cargarFragment"
+        android:name="com.example.parcialandroid.view.cargar.CargarFragment"
+        android:label="Cargar" />
+
+    <fragment
+        android:id="@+id/listarFragment"
+        android:name="com.example.parcialandroid.view.listar.ListarFragment"
+        android:label="Listar" />
+
+    <fragment
+        android:id="@+id/modificarFragment"
+        android:name="com.example.parcialandroid.view.modificar.ModificarFragment"
+        android:label="Modificar" >
+        <action
+            android:id="@+id/action_modificar_to_detalle"
+            app:destination="@id/detalleProductoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detalleProductoFragment"
+        android:name="com.example.parcialandroid.view.detalle.DetalleProductoFragment"
+        android:label="Detalle del Producto" >
+    </fragment>
+</navigation>
