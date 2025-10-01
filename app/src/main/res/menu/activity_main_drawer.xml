@@ -11,9 +11,6 @@
             android:id="@+id/listarFragment"
             android:title="@string/listar" />
         <item
-            android:id="@+id/modificarFragment"
-            android:title="@string/modificar" />
-        <item
             android:id="@+id/menu_salir"
             android:title="Salir" />
     </group>

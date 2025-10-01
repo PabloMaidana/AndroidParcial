@@ -14,17 +14,4 @@
         android:name="com.example.parcialandroid.view.listar.ListarFragment"
         android:label="Listar" />
 
-    <fragment
-        android:id="@+id/modificarFragment"
-        android:name="com.example.parcialandroid.view.modificar.ModificarFragment"
-        android:label="Modificar" >
-        <action
-            android:id="@+id/action_modificar_to_detalle"
-            app:destination="@id/detalleProductoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/detalleProductoFragment"
-        android:name="com.example.parcialandroid.view.detalle.DetalleProductoFragment"
-        android:label="Detalle del Producto" >
-    </fragment>
 </navigation>

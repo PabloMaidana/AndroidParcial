@@ -8,6 +8,7 @@ import com.example.parcialandroid.model.Producto;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -45,35 +46,28 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.cargarFragment, R.id.listarFragment, R.id.modificarFragment)
+                R.id.cargarFragment, R.id.listarFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        navController.addOnDestinationChangedListener((controller, destination, args) -> {
-            boolean isTopLevel = mAppBarConfiguration.getTopLevelDestinations()
-                    .contains(destination.getId());
-
-            if (isTopLevel) {
-                binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.open());
-            } else {
-                if (destination.getId() == R.id.detalleProductoFragment) {
-                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> {
-                        if (!controller.popBackStack(R.id.listarFragment, false)) {
-                            controller.navigate(R.id.listarFragment);
-                        }
-                    });
-                } else {
-                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> controller.navigateUp());
-                }
-            }
-        });
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.menu_salir) {
-                finishAffinity();
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Confirmar salida")
+                        .setMessage("¿Deseas salir de la aplicación?")
+                        .setPositiveButton("Sí", (dialog, which) -> {
+                            dialog.dismiss();
+                            finishAffinity();
+                        })
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                        .show();
+
+                binding.drawerLayout.closeDrawers();
                 return true;
             }
             boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
